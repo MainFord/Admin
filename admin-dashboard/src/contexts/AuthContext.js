@@ -1,27 +1,29 @@
 // src/contexts/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import api from '../services/api';
-import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigate = useNavigate(); // Initialize navigate
+  const [loading, setLoading] = useState(true); // Loading state to handle async auth checks
 
   useEffect(() => {
-    // Check authentication status on mount
     const checkAuth = async () => {
       try {
         await api.get('/check-auth');
         setIsAuthenticated(true);
       } catch (error) {
         setIsAuthenticated(false);
-        navigate('/login'); // Redirect to login if not authenticated
+        // If not authenticated and not on the login page, redirect to login
+        if (window.location.pathname !== '/login') {
+          document.location.href = '/login';
+        }
+      } finally {
+        setLoading(false); // Authentication check completed
       }
     };
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const login = async (username, password) => {
@@ -29,7 +31,6 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post('/login', { username, password });
       if (response.status === 200) {
         setIsAuthenticated(true);
-        navigate('/dashboard'); // Redirect to dashboard upon successful login
       }
       return response;
     } catch (error) {
@@ -42,17 +43,15 @@ export const AuthProvider = ({ children }) => {
     try {
       await api.post('/logout');
       setIsAuthenticated(false);
-      navigate('/login'); // Redirect to login after logout
+      document.location.href = '/login'; // Redirect to login after logout
     } catch (error) {
       console.error('Logout failed', error);
-      // Optionally, you can still redirect to login even if logout fails
-      setIsAuthenticated(false);
-      navigate('/login');
+      setIsAuthenticated(false); // Even if logout fails, update auth state
     }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

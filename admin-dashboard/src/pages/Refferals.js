@@ -156,7 +156,7 @@ const Referrals = () => {
                   : defaultColor
               }
               stroke="#fff"
-              strokeWidth={isHighlighted ? 4 : isRoot ? 4 : 2}
+              strokeWidth={isHighlighted ? 2 : isRoot ? 2 : 2}
             />
             {avatarUrl ? (
               <image
@@ -284,7 +284,7 @@ const Referrals = () => {
             separation={{ siblings: 2, nonSiblings: 2 }}
             scaleExtent={{ min: 0.1, max: 2 }}
             zoom={zoom}
-            initialDepth={2}
+            initialDepth={Infinity}
             styles={{
               links: {
                 stroke: '#b0bec5',

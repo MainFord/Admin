@@ -95,7 +95,7 @@ const Referrals = () => {
     const fetchReferralData = async () => {
       setLoading(true);
       try {
-        const response = await api.get('/referrals/66f69bfea34d00c7e5915adc'); // Replace with actual endpoint and userId
+        const response = await api.get('/referrals/671e6434d7329e8d76e05b2d'); // Replace with actual endpoint and userId
         const transformedData = transformReferralTree(response.data.referralTree);
         setTreeData(transformedData);
       } catch (err) {

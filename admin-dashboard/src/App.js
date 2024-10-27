@@ -7,6 +7,7 @@ import Users from './pages/Users';
 import Payments from './pages/Payments';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Refferals from './pages/Refferals';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/users" element={<Users />} />
             <Route path="/payments" element={<Payments />} />
+            <Route path="/refferals" element={<Refferals />} />
           </Route>
 
           {/* Fallback Route */}

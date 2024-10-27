@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/login', { username, password });
       if (response.status === 200) {
-        setIsAuthenticated(true);
+        setIsAuthenticated(true); 
       }
       return response;
     } catch (error) {

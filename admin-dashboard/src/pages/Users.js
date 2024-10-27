@@ -40,6 +40,9 @@ const Users = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10); // Rows per page
   const [totalUsers, setTotalUsers] = useState(0); // Total number of users
 
+  // State for Screenshot Modal
+  const [screenshotUrl, setScreenshotUrl] = useState(null); // To store the current screenshot URL
+
   const fetchUsers = async (currentPage = page, currentRowsPerPage = rowsPerPage) => {
     setLoading(true);
     try {
@@ -48,12 +51,14 @@ const Users = () => {
       const range = JSON.stringify([start, end]);
       const filter = JSON.stringify({}); // Adjust filters if needed
       const sort = JSON.stringify(["id", "ASC"]); // Adjust sort if needed
+      const selectFields = JSON.stringify('name email adminApproved referralCode paymentUrlOfReg'); // Include paymentUrlOfReg
 
       const response = await api.get('/users', {
         params: {
           filter,
           range,
           sort,
+          select: selectFields, // Add select parameter
         },
       });
 
@@ -217,6 +222,11 @@ const Users = () => {
     setLoading(false);
   };
 
+  // Handle viewing the screenshot
+  const handleViewScreenshot = (url) => {
+    setScreenshotUrl(url);
+  };
+
   return (
     <div>
       <Typography variant="h4" gutterBottom>
@@ -238,6 +248,7 @@ const Users = () => {
                   <TableCell>Name</TableCell>
                   <TableCell>Email</TableCell>
                   <TableCell>Admin Approved</TableCell>
+                  <TableCell>Payment Screenshot</TableCell> {/* New Column */}
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -248,6 +259,15 @@ const Users = () => {
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.adminApproved ? 'Yes' : 'No'}</TableCell>
+                    <TableCell>
+                      {user.paymentUrlOfReg ? (
+                        <Button variant="outlined" onClick={() => handleViewScreenshot(user.paymentUrlOfReg)}>
+                          View Screenshot
+                        </Button>
+                      ) : (
+                        'N/A'
+                      )}
+                    </TableCell>
                     <TableCell>
                       {!user.adminApproved && (
                         <Button variant="contained" color="primary" onClick={() => handleApprove(user._id)}>
@@ -422,6 +442,32 @@ const Users = () => {
           <Button onClick={handleEditSubmit} variant="contained" color="primary" disabled={loading}>
             {loading ? <CircularProgress size={24} /> : 'Save'}
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Screenshot Modal */}
+      <Dialog
+        open={Boolean(screenshotUrl)}
+        onClose={() => setScreenshotUrl(null)}
+        maxWidth="lg"
+        fullWidth
+      >
+        <DialogTitle>Payment Screenshot</DialogTitle>
+        <DialogContent>
+          {screenshotUrl ? (
+            <Box sx={{ textAlign: 'center' }}>
+              <img
+                src={screenshotUrl}
+                alt="Payment Screenshot"
+                style={{ maxWidth: '100%', maxHeight: '80vh' }}
+              />
+            </Box>
+          ) : (
+            <Typography>No screenshot available.</Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setScreenshotUrl(null)}>Close</Button>
         </DialogActions>
       </Dialog>
     </div>

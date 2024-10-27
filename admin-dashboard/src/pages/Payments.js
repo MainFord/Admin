@@ -87,7 +87,7 @@ const Payments = () => {
     setLoading(true);
     try {
       // Fetch detailed payment data if necessary
-      const response = await api.get(`/admin/payments/${payment._id}`);
+      const response = await api.get(`/payments/${payment._id}`);
       if (response.data) {
         setSelectedPayment(response.data);
         setEditData({
@@ -126,7 +126,7 @@ const Payments = () => {
         // Include other fields as required
       };
 
-      await api.put(`/admin/payments/${selectedPayment._id}`, payload);
+      await api.put(`/payments/${selectedPayment._id}`, payload);
       setSuccess('Payment updated successfully.');
       setSelectedPayment(null);
       fetchPayments();
@@ -142,7 +142,7 @@ const Payments = () => {
     setError('');
     setSuccess('');
     try {
-      await api.delete(`/admin/payments/${paymentId}`);
+      await api.delete(`/payments/${paymentId}`);
       setSuccess('Payment deleted successfully.');
       fetchPayments();
     } catch (err) {

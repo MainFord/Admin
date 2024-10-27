@@ -1,7 +1,7 @@
 // src/components/Layout/Sidebar.js
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Divider } from '@mui/material';
-import { Dashboard, People, Payment } from '@mui/icons-material';
+import { Dashboard, People, Payment, VerifiedUserTwoTone } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -13,6 +13,7 @@ const Sidebar = () => {
     { text: 'Dashboard', icon: <Dashboard />, path: '/' },
     { text: 'Users', icon: <People />, path: '/users' },
     { text: 'Payments', icon: <Payment />, path: '/payments' },
+    { text: 'Refferals', icon: <VerifiedUserTwoTone />, path: '/refferals' },
   ];
 
   return (
